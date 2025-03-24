@@ -6,14 +6,14 @@ export const getRandomPokemon = async () => {
     randomPokemon = randomPokemon.toString()
     const response = await fetch(`${BASE_URL}${randomPokemon}`);
     const data = await response.json();
-
+ 
     return data;
 };
-
+ 
 export const getRandomPokemonList = async () => {
   let pokemonsList = [];
   for (let i = 0; i < 20; i++){
-
+ 
     let randomPokemon = Math.floor(Math.random() * 1025);
     console.log(`${BASE_URL}${randomPokemon}`)
     randomPokemon = randomPokemon.toString()
@@ -22,16 +22,16 @@ export const getRandomPokemonList = async () => {
     pokemonsList.push(data)
   }
   pokemonsList = JSON.parse(JSON.stringify(pokemonsList));
-
+ 
   return pokemonsList;
 };
  
 export const searchPokemon = async (query) => {
-  const response = await fetch(
-    `${BASE_URL}${query}`
-  );
+  const response = await fetch(`${BASE_URL}${query}`);
   const data = await response.json();
-  return data.results;
+ 
+  // Return the full Pokémon object instead of `data.results`
+  return data;
 };
  
 export const loadPokemon = async (pokemon) => {

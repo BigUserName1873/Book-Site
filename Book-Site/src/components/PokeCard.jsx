@@ -12,18 +12,23 @@ function PokeCard({ pokemon }) {
         if (favorite) removeFromFavorites(pokemon.id)
         else addToFavorites(pokemon)
     }
+ 
+    // Use optional chaining and fallback values
+    const sprite = pokemon.sprites?.other?.['official-artwork']?.front_default || 'placeholder-image-url';
+    const types = pokemon.types?.map((type) => type.type.name).join(', ') || 'Unknown';
+ 
     return(
         <Link to={`${pokemon.id}`}>
             <div className="movie-card">
                 <div className="movie-poster">
-                    <img src={`https://pokeapi.co/api/v2/pokemon/${pokemon.sprites.other.showdown.front_default}`} alt={pokemon.name} />
+                    <img src={sprite} alt={pokemon.name} />
                 </div>
                 <div className="movie-overlay">
                     <button className={`favorite-btn ${favorite ? "active" : ''}`} onClick={onFavoriteClick}>♡</button>
                 </div>
             <div className="movie-info">
                 <h3>{pokemon.name}</h3>
-                <p>{pokemon.types}</p>
+                <p>{types}</p>
             </div>
             
             </div>

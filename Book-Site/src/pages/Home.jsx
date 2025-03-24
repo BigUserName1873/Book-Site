@@ -2,46 +2,48 @@ import PokeCard from "../components/PokeCard"
 import { useState, useEffect } from "react"
 import { searchPokemon, getRandomPokemonList } from "../services/api"
 import "../css/Home.css"
-
+ 
 function Home() {
     const [searchQuery, setSearchQuery] = useState("")
     const [pokemons, setPokemon] = useState([])  
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
-
-
+ 
+ 
     useEffect(() => {
-        const loadRandomPokemon = async () => {
+      const loadRandomPokemon = async () => {
           try {
-            const randomPokemon = await getRandomPokemonList();
-            setPokemon(pokemons.push(randomPokemon));
-            console.log(randomPokemon)
+              const randomPokemon = await getRandomPokemonList();
+              setPokemon([...pokemons, ...randomPokemon]); // Correctly update state
+              console.log(randomPokemon);
           } catch (err) {
-            console.log(err);
-            setError("Failed to load movies...");
+              console.log(err);
+              setError("Failed to load Pokémon...");
           } finally {
-            setLoading(false);
+              setLoading(false);
           }
-        };
-    
-        loadRandomPokemon();
-      }, []);
+      };
+  
+      loadRandomPokemon();
+  }, []);
     
       const handleSearch = async (e) => {
         e.preventDefault();
-        if (!searchQuery.trim()) return
-        if (loading) return
+        if (!searchQuery.trim()) return;
+        if (loading) return;
     
-        setLoading(true)
+        setLoading(true);
         try {
-            const searchResults = await searchPokemon(searchQuery)
-            setPokemon(searchResults)
-            setError(null)
+            const searchResult = await searchPokemon(searchQuery);
+    
+            // Ensure `setPokemon` always receives an array
+            setPokemon(Array.isArray(searchResult) ? searchResult : [searchResult]);
+            setError(null);
         } catch (err) {
-            console.log(err)
-            setError("Failed to search pokemon...")
+            console.log(err);
+            setError('Failed to search Pokémon...');
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
       };
     
@@ -67,6 +69,7 @@ function Home() {
           ) : (
             <div className="movies-grid">
               {console.log(pokemons)}
+              {console.log('Pokemons:', pokemons)}
               {pokemons.map((pokemon) => (
                 <PokeCard pokemon={pokemon} key={pokemon.id} />
               ))}
